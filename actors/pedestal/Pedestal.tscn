@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://actors/pedestal/Pedestal.gd" type="Script" id=1]
+[ext_resource path="res://assets/placeholder/Circle.png" type="Texture" id=2]
+[ext_resource path="res://assets/placeholder/Pedestal.png" type="Texture" id=3]
+
+[sub_resource type="CircleShape2D" id=29]
+radius = 41.0122
+
+[node name="Pedestal" type="Node2D"]
+visible = false
+position = Vector2( 143, 120 )
+script = ExtResource( 1 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 2 )
+texture_scale = 5.0
+mode = 2
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, 2 )
+shape = SubResource( 29 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

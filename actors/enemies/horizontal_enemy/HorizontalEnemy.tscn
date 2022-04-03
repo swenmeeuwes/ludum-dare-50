@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://actors/enemies/horizontal_enemy/HorizontalEnemy.gd" type="Script" id=1]
+[ext_resource path="res://assets/placeholder/Bad.png" type="Texture" id=2]
+[ext_resource path="res://assets/Bullet.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 7.95, 7.95 )
+
+[node name="HorizontalEnemy" type="KinematicBody2D"]
+position = Vector2( 276, 105 )
+collision_layer = 3
+collision_mask = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 3 )
+texture_scale = 5.0
+energy = 0.5
+mode = 1

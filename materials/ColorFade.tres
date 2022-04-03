@@ -1,0 +1,51 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=39]
+code = "shader_type canvas_item;
+
+uniform mat4 global_transform;
+
+const vec2 color_origin = vec2(0, 0);
+const float color_distance = 100.0;
+const float color_softness = 0.1;
+
+varying vec2 world_position;
+
+void vertex() {
+	world_position = (global_transform * vec4(VERTEX, 0.0, 1.0)).xy;
+}
+
+float InverseLerp(float a, float b, float v) {
+	return (v - a) / (b - a);
+}
+
+void fragment() {
+	
+//	vec2 fract_uv = fract(TEXTURE_PIXEL_SIZE);
+	
+//	vec2 step_amount = (UV / TEXTURE_PIXEL_SIZE) - (mod(UV, TEXTURE_PIXEL_SIZE) / TEXTURE_PIXEL_SIZE); // floors to how many divisions fit in number without rest value
+//	vec2 stepped_uv = TEXTURE_PIXEL_SIZE * step_amount;
+
+	vec2 step_amount = (world_position / TEXTURE_PIXEL_SIZE) - (mod(world_position, TEXTURE_PIXEL_SIZE) / TEXTURE_PIXEL_SIZE); // floors to how many divisions fit in number without rest value
+	vec2 stepped_world_position = TEXTURE_PIXEL_SIZE * step_amount;
+		
+	float distance_to_color_origin = distance(stepped_world_position, color_origin);
+	float color_strength = InverseLerp(1.0, 1.0 - color_softness, (distance_to_color_origin / color_distance));
+	vec4 tex_color = texture(TEXTURE, UV);
+	
+	float avg_gs = (tex_color.r + tex_color.g + tex_color.b) / 3.0;
+	vec4 tex_color_gs = vec4(avg_gs, avg_gs, avg_gs, tex_color.a);
+		
+	COLOR = mix(tex_color_gs, tex_color, clamp(color_strength, 0, 1));
+	
+//	if (distance_to_color_origin > color_distance) {
+//		COLOR = vec4(world_position, 0, 1);
+//	}
+	
+//	vec4 tex2 = texture(TEXTURE, UV);
+//	COLOR = vec4(tex2.x, tex2.y, tex2.z, tex2.a);
+}"
+
+[resource]
+shader = SubResource( 39 )
+shader_param/global_transform = null
